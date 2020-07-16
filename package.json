@@ -28,5 +28,8 @@
   "scripts": {
     "build": "babel src --extensions '.ts' --copy-files -d lib"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@types/gl-matrix": "^2.4.5",
+    "gl-matrix": "^3.3.0"
+  }
 }

@@ -40,4 +40,8 @@ export class BufferMesh extends Object3D {
     this.ready = ready;
     return this;
   }
+  setMaterial (mat: Material): BufferMesh {
+    this.material = mat;
+    return this;
+  }
 }

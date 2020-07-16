@@ -7,32 +7,58 @@ export class Camera extends Object3D {
   aspect: number = 1;
   near: number = 0.1;
   far: number = 100;
-  constructor () {
+  constructor() {
     super();
     this.projectionMatrix = mat4.create();
+  }
+  setAspect(aspect: number) {
+    this.aspect = aspect;
+  }
+  setNear(near: number) {
+    this.near = near;
+  }
+  setFar(far: number) {
+    this.far = far;
+  }
+  update() {
+    mat4.multiply(
+      this.projectionMatrix,
+      this.projectionMatrix,
+      this.modelViewMatrix
+    );
+  }
+}
+
+export class OrthographicCamera extends Camera {
+  orthographicWidth: 1;
+  orthographicHeight: 1;
+  constructor() {
+    super();
+
+  }
+  update() {
+    mat4.ortho(this.projectionMatrix,
+      this.orthographicWidth / 2,
+      this.orthographicWidth / 2,
+      this.orthographicHeight / 2,
+      this.orthographicHeight / 2,
+      this.near,
+      this.far);
+    super.update();
   }
 }
 
 export class PerspectiveCamera extends Camera {
-  fieldOfView: number = Math.PI/4;
-  constructor () {
+  fieldOfView: number = Math.PI / 4;
+  constructor() {
     super();
     this.update();
   }
-  setFieldOfView (fov: number): Camera {
+  setFieldOfView(fov: number): Camera {
     this.fieldOfView = fov;
     return this;
   }
-  setAspect (aspect: number) {
-    this.aspect = aspect;
-  }
-  setNear (near: number) {
-    this.near = near;
-  }
-  setFar (far: number) {
-    this.far = far;
-  }
-  update () {
+  update() {
     mat4.perspective(
       this.projectionMatrix,
       this.fieldOfView,
@@ -40,6 +66,6 @@ export class PerspectiveCamera extends Camera {
       this.near,
       this.far
     );
-    // mat4.multiply(this.projectionMatrix, this.projectionMatrix, this.modelViewMatrix);
+    super.update();
   }
 }

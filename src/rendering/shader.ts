@@ -8,11 +8,17 @@ export class Shader {
   ready: boolean;
   glShaderPosAttrName: string = "aVertexPosition";
   glShaderProjectionAttrName: string = "uProjectionMatrix";
+  glShaderModelViewAttrName: string = "uModelViewMatrix";
+  constructor () {
+    this.setReady(false);
+  }
   setVertexProgram (v: string): Shader {
+    this.setReady(false);
     this.vertexProgram = v;
     return this;
   }
   setFragmentProgram (f: string): Shader {
+    this.setReady(false);
     this.fragmentProgram = f;
     return this;
   }
@@ -58,9 +64,15 @@ export class Shader {
    * @param name aVertexPosition
    */
   setVertexPositionName (name: string) {
+    this.setReady(false);
     this.glShaderPosAttrName = name;
   }
   setProjectionName (name: string) {
+    this.setReady(false);
     this.glShaderProjectionAttrName = name;
+  }
+  setModelViewName (name: string) {
+    this.setReady(false);
+    this.glShaderModelViewAttrName = name;
   }
 }

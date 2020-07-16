@@ -41,6 +41,15 @@ export class Renderer extends Component {
     this.camera = camera;
     return this;
   }
+  setSize (width: number, height:number, updateCameraAspect: boolean = false) {
+    if (updateCameraAspect) {
+      if (!this.camera) throw "Cannot update camera aspect as requested if no camera for renderer";
+      this.camera.setAspect(width/height);
+      this.camera.update();
+    }
+    this.element.width = Math.floor(width);
+    this.element.height = Math.floor(height);
+  }
   render() {
     this.ctx.clearColor(0, 0, 0, 1);
     this.ctx.clearDepth(1.0);
@@ -81,7 +90,7 @@ export class Renderer extends Component {
 
         //Use shader
         this.ctx.useProgram(shader.glProgram);
-
+        
         //Get pointer to shader's projection
         uniformLocation = this.ctx.getUniformLocation(
           shader.glProgram, shader.glShaderProjectionAttrName
@@ -96,7 +105,7 @@ export class Renderer extends Component {
 
         //Get pointer to shader's model view
         uniformLocation = this.ctx.getUniformLocation(
-          shader.glProgram, shader.glShaderProjectionAttrName
+          shader.glProgram, shader.glShaderModelViewAttrName
         );
 
         //Pass model view matrix to shader

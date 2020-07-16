@@ -8,7 +8,7 @@ const rect = (e: HTMLElement): DOMRect => e.getBoundingClientRect();
 /**Alias for createElement*/
 const make = (type: string):HTMLElement => document.createElement(type);
 /**Listen to events on an element*/
-const on = (elem: HTMLElement|Window, type: string, callback: EventListener|any, options: any|undefined) => {
+const on = (elem: HTMLElement|Window, type: string, callback: EventListener|any, options: any|undefined = undefined) => {
   if (!elem) throw "No element supplied";
   elem.addEventListener(type, callback, options);
 }
