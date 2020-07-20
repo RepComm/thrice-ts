@@ -22,14 +22,10 @@
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
     "@babel/plugin-transform-typescript": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
-    "babel-plugin-module-resolver": "^4.0.0"
+    "@babel/preset-env": "^7.10.4"
   },
   "scripts": {
     "build": "babel src --extensions '.ts' --copy-files -d build"
   },
-  "dependencies": {
-    "@types/gl-matrix": "^2.4.5",
-    "gl-matrix": "^3.3.0"
-  }
+  "dependencies": {}
 }

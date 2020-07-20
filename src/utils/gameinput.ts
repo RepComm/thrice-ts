@@ -192,7 +192,8 @@ export class GamePadManager {
 
 export interface RendererInterface {
   rect: DOMRect;
-  center: {x: number, y: number}
+  center: {x: number, y: number};
+  zoom: number;
 }
 
 export class AxisRule {

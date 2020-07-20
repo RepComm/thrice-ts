@@ -4,7 +4,6 @@ import Component from "./component.js";
 import { Scene } from "../rendering/scene.js";
 import { Camera } from "../rendering/camera.js";
 import { BufferMesh } from "../rendering/buffermesh.js";
-import { Shader } from "../rendering/shader.js";
 
 interface RendererConstructorOptions {
   premadeCanvas: HTMLCanvasElement
@@ -17,6 +16,7 @@ export class Renderer extends Component {
   camera: Camera;
   autoClearColor: boolean = true;
   autoClearDepth: boolean = true;
+  zoom: number = 1;
   constructor(opts: RendererConstructorOptions | undefined = undefined) {
     super();
     if (opts) {

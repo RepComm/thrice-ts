@@ -38,19 +38,28 @@ builder.addTri(
   builder.addVert(1, 0, 0),
   builder.addVert(1, 1, 0)
 ).build(mesh);
-// builder.addQuad(
-//   builder.addVert(0, 0, 0),
-//   builder.addVert(1, 0, 0),
-//   builder.addVert(1, 1, 0),
-//   builder.addVert(0, 1, 0)
-// ).build(mesh);
+
 
 //Make sure mesh buffers are updated
 mesh.update(renderer.ctx);
-mesh.translateByCoords(0, 0, -5);
+mesh.translateByValues(0, 0, -5);
 
 //Add mesh to scene
 scene.add(mesh);
+
+let mesh2 = new BufferMesh().setMaterial(material);
+builder.addTri(
+  builder.addVert(0, 0, 0),
+  builder.addVert(1, 0, 0),
+  builder.addVert(1, 1, 0)
+).build(mesh2);
+
+//Make sure mesh buffers are updated
+mesh2.update(renderer.ctx);
+mesh2.translateByValues(1, 0, -5);
+
+//Add mesh to scene
+scene.add(mesh2);
 
 //Camera and scene
 renderer.setCamera(camera);
@@ -75,7 +84,7 @@ let onAnim = ()=>{
   timeNow = Date.now();
   timeDelta = timeNow - timeLast;
 
-  mesh.translateByCoords(
+  mesh.translateByValues(
     0,// input.raw.consumeMovementX() / sensitivity, 
     0,//-input.raw.consumeMovementY() / sensitivity,
     input.raw.consumeMovementY() / sensitivity

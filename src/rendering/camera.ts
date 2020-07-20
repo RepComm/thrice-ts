@@ -1,15 +1,15 @@
 
-import { mat4 } from "gl-matrix";
+import { Matrix4x4 } from "../math/matrix4x4.js";
 import { Object3D } from "./object3d.js";
 
 export class Camera extends Object3D {
-  projectionMatrix: mat4;
+  projectionMatrix: Matrix4x4;
   aspect: number = 1;
   near: number = 0.1;
   far: number = 100;
   constructor() {
     super();
-    this.projectionMatrix = mat4.create();
+    this.projectionMatrix = new Matrix4x4();
   }
   setAspect(aspect: number) {
     this.aspect = aspect;
@@ -21,11 +21,7 @@ export class Camera extends Object3D {
     this.far = far;
   }
   update() {
-    mat4.multiply(
-      this.projectionMatrix,
-      this.projectionMatrix,
-      this.modelViewMatrix
-    );
+    this.projectionMatrix.mul(this.modelViewMatrix);
   }
 }
 
@@ -37,7 +33,7 @@ export class OrthographicCamera extends Camera {
 
   }
   update() {
-    mat4.ortho(this.projectionMatrix,
+    this.projectionMatrix.ortho(
       this.orthographicWidth / 2,
       this.orthographicWidth / 2,
       this.orthographicHeight / 2,
@@ -59,8 +55,7 @@ export class PerspectiveCamera extends Camera {
     return this;
   }
   update() {
-    mat4.perspective(
-      this.projectionMatrix,
+    this.projectionMatrix.perspective(
       this.fieldOfView,
       this.aspect,
       this.near,

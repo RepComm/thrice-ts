@@ -12,12 +12,6 @@
       }
     ]
   ],
-  "plugins": ["@babel/plugin-transform-typescript",
-    ["module-resolver", {
-      "root": ["./lib"],
-      "alias": {
-        "gl-matrix": "./libs/glMatrix/index.js"
-      }
-    }]
+  "plugins": ["@babel/plugin-transform-typescript"
   ]
 }

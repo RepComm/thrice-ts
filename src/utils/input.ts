@@ -183,7 +183,7 @@ export class Input {
     on(window, "keydown", this.onKeyDown);
     on(window, "contextmenu", this.onContextMenu);
   }
-  onEvent(type: "key-up"|"key-down"|"pointer-up"|"pointer-down") {
+  onEvent(type: "key-up"|"key-down"|"pointer-up"|"pointer-down"|"pointer-move") {
     for (let l of this.listeners) {
       l(type);
     }
