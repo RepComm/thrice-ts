@@ -14,7 +14,7 @@ const on = (elem: HTMLElement|Window, type: string, callback: EventListener|any,
 }
 
 /**Stop listen to events on an element*/
-const off = (elem: HTMLElement, type: string, callback: EventListener) => {
+const off = (elem: HTMLElement|Window, type: string, callback: EventListener) => {
   if (!elem) throw "No element supplied";
   elem.removeEventListener(type, callback);
 }

@@ -3,7 +3,7 @@ import Component from "./component.js";
 
 import { Scene } from "../rendering/scene.js";
 import { Camera } from "../rendering/camera.js";
-import { BufferMesh } from "../rendering/BufferMesh.js";
+import { BufferMesh } from "../rendering/buffermesh.js";
 import { Shader } from "../rendering/shader.js";
 
 interface RendererConstructorOptions {
@@ -15,6 +15,8 @@ export class Renderer extends Component {
   ctx: WebGL2RenderingContext;
   scene: Scene;
   camera: Camera;
+  autoClearColor: boolean = true;
+  autoClearDepth: boolean = true;
   constructor(opts: RendererConstructorOptions | undefined = undefined) {
     super();
     if (opts) {
@@ -49,6 +51,12 @@ export class Renderer extends Component {
     }
     this.element.width = Math.floor(width);
     this.element.height = Math.floor(height);
+    this.ctx.viewport(0, 0, this.element.width, this.element.height);
+  }
+  setAutoClear (color: boolean = true, depth: boolean = true): Renderer {
+    this.autoClearColor = color;
+    this.autoClearDepth = depth;
+    return this;
   }
   render() {
     this.ctx.clearColor(0, 0, 0, 1);
@@ -60,69 +68,18 @@ export class Renderer extends Component {
 
     if (!this.scene) throw "No scene to render!";
 
-    let attributeLocation: number;
-    let uniformLocation: WebGLUniformLocation;
-    let shader: Shader;
-
     this.scene.traverse((child) => {
       if (child instanceof BufferMesh) {
-        shader = child.material.shader;
+        child.render(this, this.ctx);
 
-        this.ctx.bindBuffer(this.ctx.ARRAY_BUFFER, child.glPosBuffer);
-
-        //Get a pointer to shader's position data
-        attributeLocation = this.ctx.getAttribLocation(
-          shader.glProgram,
-          shader.glShaderPosAttrName
-        );
-
-        //Pass instructions to it
-        this.ctx.vertexAttribPointer(
-          attributeLocation,
-          3, //Number of components per vertex
-          this.ctx.FLOAT, //components are float
-          false, //normalized
-          0, 0 //stride, offset
-        );
-
-        //Enable it
-        this.ctx.enableVertexAttribArray(attributeLocation);
-
-        //Use shader
-        this.ctx.useProgram(shader.glProgram);
-        
-        //Get pointer to shader's projection
-        uniformLocation = this.ctx.getUniformLocation(
-          shader.glProgram, shader.glShaderProjectionAttrName
-        );
-
-        //Pass camera's projection to shader
-        this.ctx.uniformMatrix4fv(
-          uniformLocation,
-          false,
-          this.camera.projectionMatrix
-        );
-
-        //Get pointer to shader's model view
-        uniformLocation = this.ctx.getUniformLocation(
-          shader.glProgram, shader.glShaderModelViewAttrName
-        );
-
-        //Pass model view matrix to shader
-        this.ctx.uniformMatrix4fv(
-          uniformLocation,
-          false,
-          child.modelViewMatrix
-        );
-        
-        //Draw it
-        this.ctx.drawArrays(
-          this.ctx.TRIANGLES,
-          0,
-          child.vertexCount
-        );
+        // Draw using verts and tri indicies (order of verts)
+        // this.ctx.drawElements(
+        //   this.ctx.TRIANGLES,
+        //   child.vertexCount,
+        //   this.ctx.UNSIGNED_SHORT,
+        //   0
+        // );
       }
-
     });
     
   }

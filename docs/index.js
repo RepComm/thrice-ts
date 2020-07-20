@@ -3,9 +3,10 @@ import { get, on } from "./ui/aliases.js";
 import { Renderer } from "./ui/renderer.js";
 import { PerspectiveCamera } from "./rendering/camera.js";
 import { Scene } from "./rendering/scene.js";
-import { BufferMesh } from "./rendering/BufferMesh.js";
+import { BufferMesh } from "./rendering/buffermesh.js";
 import { MeshBuilder } from "./utils/meshbuilder.js";
-import { DemoMaterial } from "./rendering/materials/demomaterial.js"; //Container of our app on the page
+import { DemoMaterial } from "./rendering/materials/demomaterial.js";
+import { GameInput } from "./utils/gameinput.js"; //Container of our app on the page
 
 const cont = new Component().useNative(get("container"));
 const renderer = new Renderer().mount(cont).id("canvas");
@@ -19,9 +20,13 @@ let builder = new MeshBuilder(); //Make an output
 
 let mesh = new BufferMesh().setMaterial(material); //Add a triangle
 
-builder.addTri(builder.addVert(-1, -1, 0), builder.addVert(1, -1, 0), builder.addVert(1, 1, -0)); //Output the mesh
-
-builder.build(mesh); //Make sure mesh buffers are updated
+builder.addTri(builder.addVert(0, 0, 0), builder.addVert(1, 0, 0), builder.addVert(1, 1, 0)).build(mesh); // builder.addQuad(
+//   builder.addVert(0, 0, 0),
+//   builder.addVert(1, 0, 0),
+//   builder.addVert(1, 1, 0),
+//   builder.addVert(0, 1, 0)
+// ).build(mesh);
+//Make sure mesh buffers are updated
 
 mesh.update(renderer.ctx);
 mesh.translateByCoords(0, 0, -5); //Add mesh to scene
@@ -31,35 +36,25 @@ scene.add(mesh); //Camera and scene
 renderer.setCamera(camera);
 renderer.setScene(scene);
 renderer.setSize(renderer.rect.width, renderer.rect.height, true);
-let direction = false;
 let timeNow = 0;
 let timeLast = 0;
 let timeDelta = 0;
-let timeEnlapsed = 0;
-let timeMax = 200;
 on(window, "resize", () => {
   renderer.setSize(renderer.rect.width, renderer.rect.height, true);
 });
+let sensitivity = 250;
+let input = GameInput.get();
 
 let onAnim = () => {
-  renderer.render();
   timeLast = timeNow;
   timeNow = Date.now();
   timeDelta = timeNow - timeLast;
-  timeEnlapsed += timeDelta;
+  mesh.translateByCoords(0, // input.raw.consumeMovementX() / sensitivity, 
+  0, //-input.raw.consumeMovementY() / sensitivity,
+  input.raw.consumeMovementY() / sensitivity); //camera.translateByCoords(-mx/250, my/250, 0);
+  //camera.update();
 
-  if (timeEnlapsed > timeMax) {
-    direction = !direction;
-    timeEnlapsed = 0;
-  }
-
-  if (direction) {
-    camera.translateByCoords(0, 0, 0.1);
-  } else {
-    camera.translateByCoords(0, 0, -0.1);
-  }
-
-  camera.update();
+  renderer.render();
   window.requestAnimationFrame(onAnim);
 };
 

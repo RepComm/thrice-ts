@@ -1,7 +1,10 @@
 export class Shader {
   glShaderPosAttrName = "aVertexPosition";
+  glPosAttributePointer = -1;
   glShaderProjectionAttrName = "uProjectionMatrix";
+  glProjectionAttributePointer = null;
   glShaderModelViewAttrName = "uModelViewMatrix";
+  glModelViewAttributePointer = null;
 
   constructor() {
     this.setReady(false);
@@ -54,6 +57,22 @@ export class Shader {
 
     if (!ctx.getProgramParameter(this.glProgram, ctx.LINK_STATUS)) {
       throw `Shader program couldn't init, gl error is as follows:" + ${ctx.getProgramInfoLog(this.glProgram)}`;
+    } //Set up attribute pointers
+    //Get a pointer to shader's position data
+
+
+    if (this.glPosAttributePointer === -1) {
+      this.glPosAttributePointer = ctx.getAttribLocation(this.glProgram, this.glShaderPosAttrName);
+    } //Get pointer to shader's projection
+
+
+    if (this.glProjectionAttributePointer === null) {
+      this.glProjectionAttributePointer = ctx.getUniformLocation(this.glProgram, this.glShaderProjectionAttrName);
+    } //Get pointer to shader's model view
+
+
+    if (this.glModelViewAttributePointer === null) {
+      this.glModelViewAttributePointer = ctx.getUniformLocation(this.glProgram, this.glShaderModelViewAttrName);
     }
 
     this.setReady(true);
