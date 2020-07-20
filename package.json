@@ -26,7 +26,7 @@
     "babel-plugin-module-resolver": "^4.0.0"
   },
   "scripts": {
-    "build": "babel src --extensions '.ts' --copy-files -d docs"
+    "build": "babel src --extensions '.ts' --copy-files -d build"
   },
   "dependencies": {
     "@types/gl-matrix": "^2.4.5",
